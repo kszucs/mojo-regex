@@ -1,3 +1,3 @@
 #!/bin/bash
 
-mojo package src/regex -o mojo-regex.mojopkg
+mojo precompile src/regex -o regex.mojoc

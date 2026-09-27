@@ -1648,7 +1648,7 @@ struct NFAEngine(Copyable, Engine):
 
     @always_inline
     def _match_char_in_range[
-        O: Origin
+        O: Origin[mut=False]
     ](self, range_pattern: StringSlice[O], ch_code: Int) -> Bool:
         """Helper function to check if a character matches a range pattern."""
         if range_pattern.startswith("[") and range_pattern.endswith("]"):

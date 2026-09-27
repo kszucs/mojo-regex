@@ -1604,7 +1604,7 @@ def _apply_template_fixed(
 
     No repl scanning. Walks the template list and emits slices.
     """
-    var out = String(capacity=output_estimate + 4)
+    var out = String(capacity_bytes=output_estimate + 4)
     var tpl_ptr = template.unsafe_ptr()
     var tpl_len = len(template)
 
@@ -1631,7 +1631,7 @@ def _apply_template_groups[
     group_idx: Array[Int, 10],
 ) -> String:
     """Apply pre-parsed template using NFA-extracted group matches."""
-    var out = String(capacity=32)
+    var out = String(capacity_bytes=32)
     var tpl_ptr = template.unsafe_ptr()
     var tpl_len = len(template)
 
@@ -1698,7 +1698,7 @@ def _sub_impl_with_repl(
         return String(text)
 
     var text_ptr = text.unsafe_ptr()
-    var result = String(capacity=text_len + 64)
+    var result = String(capacity_bytes=text_len + 64)
     var pos = 0
     var replacements = 0
 

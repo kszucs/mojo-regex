@@ -660,7 +660,7 @@ struct PatternAnalyzer:
             )
         elif node.type == GROUP:
             # Extract literal string from GROUP of ELEMENTs
-            var branch_text = String(capacity=String.INLINE_CAPACITY)
+            var branch_text = String(capacity_bytes=String.INLINE_CAPACITY)
             for i in range(node.get_children_len()):
                 ref element = node.get_child(i)
                 if element.type != ELEMENT:
@@ -681,7 +681,7 @@ struct PatternAnalyzer:
         if len(branches) == 1:
             return branches[0]
 
-        var prefix = String(capacity=String.INLINE_CAPACITY)
+        var prefix = String(capacity_bytes=String.INLINE_CAPACITY)
         ref first_branch = branches[0]
         var min_length = first_branch.byte_length()
 
@@ -937,12 +937,12 @@ def _extract_literal_chars(ast: ASTNode) -> String:
         var repeats = ast.min
         if repeats <= 1:
             return String(ch)
-        var out = String(capacity=repeats * ch.byte_length())
+        var out = String(capacity_bytes=repeats * ch.byte_length())
         for _ in range(repeats):
             out += ch
         return out
     elif ast.type == GROUP:
-        var result = String(capacity=String.INLINE_CAPACITY)
+        var result = String(capacity_bytes=String.INLINE_CAPACITY)
         for i in range(ast.get_children_len()):
             result += _extract_literal_chars(ast.get_child(i))
         return result

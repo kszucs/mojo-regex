@@ -144,7 +144,7 @@ def _expand_character_range[
     # Fallback for complex cases - expand all ranges and characters
     # Estimate capacity: each range a-z adds up to 26 chars, single chars add 1
     var estimated_capacity = inner.byte_length() * 10  # Generous estimate
-    var result = String(capacity=estimated_capacity)
+    var result = String(capacity_bytes=estimated_capacity)
     var i = 0
     while i < inner.byte_length():
         if i + 2 < inner.byte_length() and Int(
@@ -2795,7 +2795,7 @@ def _collect_alternation_branches(
         # cheap and keeps `current` valid across the appends.
         var current = nodes[idx]
         if current.type == GROUP:
-            var branch = String(capacity=current.get_children_len())
+            var branch = String(capacity_bytes=current.get_children_len())
             for i in range(current.get_children_len()):
                 ref child = current.get_child(i)
                 if child.type == ELEMENT and child.get_value():

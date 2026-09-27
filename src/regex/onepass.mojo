@@ -161,7 +161,7 @@ def _hash_set(nfa_set: SIMD[DType.uint8, MAX_STATES]) -> UInt64:
 
     var u64_view = bitcast[DType.uint64, NUM_U64](nfa_set)
 
-    @parameter
+    @__parameter
     def xor_op[
         w: Int
     ](a: SIMD[DType.uint64, w], b: SIMD[DType.uint64, w]) -> SIMD[

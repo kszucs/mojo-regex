@@ -25,12 +25,12 @@ comptime EMAIL_TEXT = (
 comptime EMAIL_LONG = EMAIL_TEXT * 20
 
 
-@parameter
+@__parameter
 def bench_literal_prefix_short(mut b: Bencher) raises:
     """Benchmark literal prefix pattern on short text."""
 
     @always_inline
-    @parameter
+    @__parameter
     def call_fn() raises:
         var results = findall("hello.*world", SHORT_TEXT)
         keep(len(results))
@@ -38,12 +38,12 @@ def bench_literal_prefix_short(mut b: Bencher) raises:
     b.iter[call_fn]()
 
 
-@parameter
+@__parameter
 def bench_literal_prefix_medium(mut b: Bencher) raises:
     """Benchmark literal prefix pattern on medium text."""
 
     @always_inline
-    @parameter
+    @__parameter
     def call_fn() raises:
         var results = findall("hello.*", MEDIUM_TEXT)
         keep(len(results))
@@ -51,12 +51,12 @@ def bench_literal_prefix_medium(mut b: Bencher) raises:
     b.iter[call_fn]()
 
 
-@parameter
+@__parameter
 def bench_literal_prefix_long(mut b: Bencher) raises:
     """Benchmark literal prefix pattern on long text."""
 
     @always_inline
-    @parameter
+    @__parameter
     def call_fn() raises:
         var results = findall("hello.*", LONG_TEXT)
         keep(len(results))
@@ -64,12 +64,12 @@ def bench_literal_prefix_long(mut b: Bencher) raises:
     b.iter[call_fn]()
 
 
-@parameter
+@__parameter
 def bench_required_literal_short(mut b: Bencher) raises:
     """Benchmark required literal (not prefix) on short text."""
 
     @always_inline
-    @parameter
+    @__parameter
     def call_fn() raises:
         var results = findall(".*@example\\.com", EMAIL_TEXT)
         keep(len(results))
@@ -77,12 +77,12 @@ def bench_required_literal_short(mut b: Bencher) raises:
     b.iter[call_fn]()
 
 
-@parameter
+@__parameter
 def bench_required_literal_long(mut b: Bencher) raises:
     """Benchmark required literal (not prefix) on long text."""
 
     @always_inline
-    @parameter
+    @__parameter
     def call_fn() raises:
         var results = findall(".*@example\\.com", EMAIL_LONG)
         keep(len(results))
@@ -90,12 +90,12 @@ def bench_required_literal_long(mut b: Bencher) raises:
     b.iter[call_fn]()
 
 
-@parameter
+@__parameter
 def bench_no_literal_baseline(mut b: Bencher) raises:
     """Benchmark pattern with no literals as baseline."""
 
     @always_inline
-    @parameter
+    @__parameter
     def call_fn() raises:
         var results = findall("[a-z]+", MEDIUM_TEXT)
         keep(len(results))
@@ -103,12 +103,12 @@ def bench_no_literal_baseline(mut b: Bencher) raises:
     b.iter[call_fn]()
 
 
-@parameter
+@__parameter
 def bench_alternation_common_prefix(mut b: Bencher) raises:
     """Benchmark alternation with common prefix."""
 
     @always_inline
-    @parameter
+    @__parameter
     def call_fn() raises:
         var results = findall("(hello|help|helicopter)", MEDIUM_TEXT)
         keep(len(results))

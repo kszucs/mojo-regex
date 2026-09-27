@@ -121,7 +121,7 @@ def get_range_str(start: String, end: String) -> String:
     var range_size = end_ord - start_ord + 1
 
     # Pre-allocate to avoid repeated reallocations
-    var result = String(capacity=range_size + 1)
+    var result = String(capacity_bytes=range_size + 1)
     for i in range(range_size):
         result += chr(start_ord + i)
     return result

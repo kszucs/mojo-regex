@@ -1,6 +1,10 @@
 [workspace]
 authors = ["Manuel Saelices <msaelices@gmail.com>"]
-channels = ["conda-forge", "https://conda.modular.com/max"]
+channels = [
+  "https://conda.modular.com/max-nightly/",
+  "conda-forge",
+  "https://prefix.dev/pixi-build-backends",
+]
 description = "Library for dealing with regular expressions in Mojo"
 homepage = "https://github.com/msaelices/mojo-regex"
 repository = "https://github.com/msaelices/mojo-regex"
@@ -16,10 +20,19 @@ name = "mojo-regex"
 version = "0.21.0"
 
 [package.build]
-backend = { name = "pixi-build-rattler-build", version = "*" }
+backend = { name = "pixi-build-mojo", version = "0.2.*" }
+
+# Installs $PREFIX/lib/mojo/regex.mojoc (or .mojopkg on a Mojo without
+# `precompile`), which Mojo resolves with no `-I`.
+[package.build.config]
+pkg = { name = "regex", path = "src/regex" }
+
+[package.build-dependencies]
+mojo-compiler = "==1.2.0.dev2026092105"
+mojo = "==1.2.0.dev2026092105"
 
 [dependencies]
-mojo = "==1.0.0"
+mojo = "==1.2.0.dev2026092105"
 
 [tasks]
 test = "bash -c 'status=0; for f in tests/test_*.mojo; do echo \"Running $f...\"; out=$(mktemp -d); mojo build -I ./src -debug-level=line-tables \"$f\" -o \"$out/exe\" && \"$out/exe\" || status=1; rm -rf \"$out\"; done; exit $status'"

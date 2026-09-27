@@ -104,14 +104,14 @@ def make_range_heavy_text[length: Int]() -> String:
 # ===-----------------------------------------------------------------------===#
 
 
-@parameter
+@__parameter
 def bench_nfa_simd_digits[text_length: Int](mut b: Bencher) raises:
     """Benchmark NFA engine with SIMD-optimized digit matching."""
     var test_text = make_digit_heavy_text[text_length]()
     var engine = NFAEngine("\\d+")
 
     @always_inline
-    @parameter
+    @__parameter
     def call_fn() raises:
         for _ in range(20):
             var result = engine.match_all(test_text)
@@ -122,14 +122,14 @@ def bench_nfa_simd_digits[text_length: Int](mut b: Bencher) raises:
     _ = engine^
 
 
-@parameter
+@__parameter
 def bench_nfa_simd_whitespace[text_length: Int](mut b: Bencher) raises:
     """Benchmark NFA engine with SIMD-optimized whitespace matching."""
     var test_text = make_space_heavy_text[text_length]()
     var engine = NFAEngine("\\s+")
 
     @always_inline
-    @parameter
+    @__parameter
     def call_fn() raises:
         for _ in range(20):
             var result = engine.match_all(test_text)
@@ -140,14 +140,14 @@ def bench_nfa_simd_whitespace[text_length: Int](mut b: Bencher) raises:
     _ = engine^
 
 
-@parameter
+@__parameter
 def bench_nfa_simd_range[text_length: Int](mut b: Bencher) raises:
     """Benchmark NFA engine with SIMD-optimized character range matching."""
     var test_text = make_range_heavy_text[text_length]()
     var engine = NFAEngine("[a-zA-Z0-9]+")
 
     @always_inline
-    @parameter
+    @__parameter
     def call_fn() raises:
         for _ in range(20):
             var result = engine.match_all(test_text)
@@ -158,7 +158,7 @@ def bench_nfa_simd_range[text_length: Int](mut b: Bencher) raises:
     _ = engine^
 
 
-@parameter
+@__parameter
 def bench_nfa_simd_negated_range[text_length: Int](mut b: Bencher) raises:
     """Benchmark NFA engine with SIMD-optimized negated character range matching.
     """
@@ -166,7 +166,7 @@ def bench_nfa_simd_negated_range[text_length: Int](mut b: Bencher) raises:
     var engine = NFAEngine("[^a-zA-Z0-9]+")
 
     @always_inline
-    @parameter
+    @__parameter
     def call_fn() raises:
         for _ in range(20):
             var result = engine.match_all(test_text)
@@ -177,7 +177,7 @@ def bench_nfa_simd_negated_range[text_length: Int](mut b: Bencher) raises:
     _ = engine^
 
 
-@parameter
+@__parameter
 def bench_nfa_simd_quantified_range[text_length: Int](mut b: Bencher) raises:
     """Benchmark NFA engine with SIMD-optimized quantified character range matching.
     """
@@ -185,7 +185,7 @@ def bench_nfa_simd_quantified_range[text_length: Int](mut b: Bencher) raises:
     var engine = NFAEngine("[a-z]{3,10}")
 
     @always_inline
-    @parameter
+    @__parameter
     def call_fn() raises:
         for _ in range(20):
             var result = engine.match_all(test_text)
