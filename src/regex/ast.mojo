@@ -92,9 +92,12 @@ struct Regex[origin: Origin](Copyable, Equatable, Movable, Writable):
         """Initialize a Regex with a pattern."""
         self.pattern = pattern
         self.children_len = 0
+        # Two nodes per pattern byte, plus the wrapper and root nodes that
+        # `parse` appends after the tokens -- without them an empty pattern
+        # allocates nothing and `append_child` writes past the end.
         self.children_ptr = unsafe_alloc[ASTNode[ImmUntrackedOrigin]](
-            pattern.byte_length() * 2
-        )  # Allocate enough space for children
+            pattern.byte_length() * 2 + 2
+        )
 
     @always_inline
     def __eq__[o: Origin](self, other: Regex[origin=o]) -> Bool:
