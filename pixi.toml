@@ -28,11 +28,11 @@ backend = { name = "pixi-build-mojo", version = "0.2.*" }
 pkg = { name = "regex", path = "src/regex" }
 
 [package.build-dependencies]
-mojo-compiler = "==1.2.0.dev2026092105"
-mojo = "==1.2.0.dev2026092105"
+mojo-compiler = "==1.2.0.dev2026100805"
+mojo = "==1.2.0.dev2026100805"
 
 [dependencies]
-mojo = "==1.2.0.dev2026092105"
+mojo = "==1.2.0.dev2026100805"
 
 [tasks]
 test = "bash -c 'status=0; for f in tests/test_*.mojo; do echo \"Running $f...\"; out=$(mktemp -d); mojo build -I ./src -debug-level=line-tables \"$f\" -o \"$out/exe\" && \"$out/exe\" || status=1; rm -rf \"$out\"; done; exit $status'"

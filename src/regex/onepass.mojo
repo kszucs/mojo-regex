@@ -140,6 +140,12 @@ def _closure_reaches_match_with_end_anchor(
     return _set_contains_match(program, end_set)
 
 
+def _xor_op[
+    w: Int
+](a: SIMD[DType.uint64, w], b: SIMD[DType.uint64, w]) -> SIMD[DType.uint64, w]:
+    return a ^ b
+
+
 @always_inline
 def _hash_set(nfa_set: SIMD[DType.uint8, MAX_STATES]) -> UInt64:
     """Hash of the state set bytes for O(1) dedup during subset
@@ -161,19 +167,11 @@ def _hash_set(nfa_set: SIMD[DType.uint8, MAX_STATES]) -> UInt64:
 
     var u64_view = bitcast[DType.uint64, NUM_U64](nfa_set)
 
-    @__parameter
-    def xor_op[
-        w: Int
-    ](a: SIMD[DType.uint64, w], b: SIMD[DType.uint64, w]) -> SIMD[
-        DType.uint64, w
-    ]:
-        return a ^ b
-
     # XOR reduction is native on AVX2 (vpxor on ymm registers). A SIMD
     # multiply over 64 u64 lanes would fall back to scalar without
     # AVX-512 (vpmullq), so skip it in the reduction and apply one
     # scalar mix to diffuse bits at the end.
-    var reduced = (u64_view ^ mixers).reduce[xor_op]()
+    var reduced = (u64_view ^ mixers).reduce[_xor_op]()
     return (reduced ^ 0xCBF29CE484222325) * 0x100000001B3
 
 
