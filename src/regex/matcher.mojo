@@ -5,7 +5,7 @@ This module provides the unified interface for different regex matching engines
 and implements the hybrid routing system that selects the optimal engine based
 on pattern complexity.
 """
-from std.hashlib import hash
+from std.hash import hash
 from std.memory import Pointer
 from std.memory.alloc import unsafe_alloc
 from std.os import abort

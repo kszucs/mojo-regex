@@ -2440,7 +2440,7 @@ def compile_dfa_pattern[
     elif _is_sequential_character_class_pattern(ast):
         # Handle sequential character class patterns like [+]*\d+[-]*\d+
         var sequence_info = _extract_sequential_pattern_info(ast)
-        dfa.compile_sequential_pattern(sequence_info^)
+        dfa.compile_sequential_pattern(sequence_info)
     elif _is_mixed_sequential_pattern(ast):
         # Handle mixed patterns like [0-9]+\.?[0-9]* (numbers with optional decimal)
         var sequence_info = _extract_mixed_sequential_pattern_info(ast)
