@@ -664,7 +664,7 @@ struct NFAEngine(Copyable, Engine):
         mut matches: List[Match[O]],
         match_first_mode: Bool = False,
         required_start_pos: Int = -1,
-    ) capturing -> Tuple[Bool, Int]:
+    ) -> Tuple[Bool, Int]:
         """Core matching function that processes AST nodes recursively.
 
         Args:
@@ -763,7 +763,7 @@ struct NFAEngine(Copyable, Engine):
         str_i: Int,
         match_first_mode: Bool,
         required_start_pos: Int,
-    ) capturing -> Tuple[Bool, Int]:
+    ) -> Tuple[Bool, Int]:
         """Match a literal character element."""
         if str_i >= str.byte_length():
             return (False, str_i)
@@ -791,7 +791,7 @@ struct NFAEngine(Copyable, Engine):
         str_i: Int,
         match_first_mode: Bool,
         required_start_pos: Int,
-    ) capturing -> Tuple[Bool, Int]:
+    ) -> Tuple[Bool, Int]:
         """Match wildcard (.) - any character except newline."""
         if str_i >= str.byte_length():
             return (False, str_i)
@@ -815,7 +815,7 @@ struct NFAEngine(Copyable, Engine):
         str_i: Int,
         match_first_mode: Bool,
         required_start_pos: Int,
-    ) capturing -> Tuple[Bool, Int]:
+    ) -> Tuple[Bool, Int]:
         """Match whitespace character (\\s)."""
         if str_i >= str.byte_length():
             return (False, str_i)
@@ -847,7 +847,7 @@ struct NFAEngine(Copyable, Engine):
         str_i: Int,
         match_first_mode: Bool,
         required_start_pos: Int,
-    ) capturing -> Tuple[Bool, Int]:
+    ) -> Tuple[Bool, Int]:
         """Match digit character (\\d)."""
         if str_i >= str.byte_length():
             # End of string - check if quantifier allows zero matches
@@ -889,7 +889,7 @@ struct NFAEngine(Copyable, Engine):
         str_i: Int,
         match_first_mode: Bool,
         required_start_pos: Int,
-    ) capturing -> Tuple[Bool, Int]:
+    ) -> Tuple[Bool, Int]:
         """Match word character (\\w)."""
         if str_i >= str.byte_length():
             # End of string - check if quantifier allows zero matches
@@ -936,7 +936,7 @@ struct NFAEngine(Copyable, Engine):
         str_i: Int,
         match_first_mode: Bool,
         required_start_pos: Int,
-    ) capturing -> Tuple[Bool, Int]:
+    ) -> Tuple[Bool, Int]:
         """Match character range [abc] or [^abc]."""
         if str_i >= str.byte_length():
             return (False, str_i)
@@ -997,7 +997,7 @@ struct NFAEngine(Copyable, Engine):
     @always_inline
     def _match_start(
         self, ast: ASTNode, str_i: Int
-    ) capturing -> Tuple[Bool, Int]:
+    ) -> Tuple[Bool, Int]:
         """Match start anchor (^)."""
         if str_i == 0:
             return (True, str_i)
@@ -1007,7 +1007,7 @@ struct NFAEngine(Copyable, Engine):
     @always_inline
     def _match_end[
         O: ImmOrigin
-    ](self, ast: ASTNode, str: StringSlice[O], str_i: Int) capturing -> Tuple[
+    ](self, ast: ASTNode, str: StringSlice[O], str_i: Int) -> Tuple[
         Bool, Int
     ]:
         """Match end anchor ($)."""
@@ -1026,7 +1026,7 @@ struct NFAEngine(Copyable, Engine):
         mut matches: List[Match[O]],
         match_first_mode: Bool,
         required_start_pos: Int,
-    ) capturing -> Tuple[Bool, Int]:
+    ) -> Tuple[Bool, Int]:
         """Match OR node - try left branch first, then right."""
         if ast.get_children_len() < 2:
             return (False, str_i)
@@ -1064,7 +1064,7 @@ struct NFAEngine(Copyable, Engine):
         mut matches: List[Match[O]],
         match_first_mode: Bool,
         required_start_pos: Int,
-    ) capturing -> Tuple[Bool, Int]:
+    ) -> Tuple[Bool, Int]:
         """Match GROUP node - process children sequentially with backtracking.
         """
         var start_pos = str_i
@@ -1112,7 +1112,7 @@ struct NFAEngine(Copyable, Engine):
         mut matches: List[Match[O]],
         match_first_mode: Bool,
         required_start_pos: Int,
-    ) capturing -> Tuple[Bool, Int]:
+    ) -> Tuple[Bool, Int]:
         """Match a group that has a quantifier applied to it."""
         var min_matches = ast.min
         var max_matches = ast.max
@@ -1166,7 +1166,7 @@ struct NFAEngine(Copyable, Engine):
         mut matches: List[Match[O]],
         match_first_mode: Bool,
         required_start_pos: Int,
-    ) capturing -> Tuple[Bool, Int]:
+    ) -> Tuple[Bool, Int]:
         """Match a sequence of AST nodes with backtracking support."""
         var children_len = ast_parent.get_children_len()
         # DEBUG: Uncomment to debug
@@ -1223,7 +1223,7 @@ struct NFAEngine(Copyable, Engine):
             )
 
     @always_inline
-    def _has_quantifier(self, ast: ASTNode) capturing -> Bool:
+    def _has_quantifier(self, ast: ASTNode) -> Bool:
         """Check if node has quantifier (min != 1 or max != 1)."""
         return ast.min != 1 or ast.max != 1
 
@@ -1240,7 +1240,7 @@ struct NFAEngine(Copyable, Engine):
         mut matches: List[Match[O]],
         match_first_mode: Bool,
         required_start_pos: Int,
-    ) capturing -> Tuple[Bool, Int]:
+    ) -> Tuple[Bool, Int]:
         """Match a quantified node followed by other nodes, with backtracking.
         """
         var min_matches = quantified_node.min
@@ -1320,7 +1320,7 @@ struct NFAEngine(Copyable, Engine):
         count: Int,
         match_first_mode: Bool,
         required_start_pos: Int,
-    ) capturing -> Int:
+    ) -> Int:
         """Try to match exactly 'count' repetitions of the node. Returns characters consumed or -1.
         """
         var pos = str_i
@@ -1358,7 +1358,7 @@ struct NFAEngine(Copyable, Engine):
         mut matches: List[Match[O]],
         match_first_mode: Bool,
         required_start_pos: Int,
-    ) capturing -> Tuple[Bool, Int]:
+    ) -> Tuple[Bool, Int]:
         """Match RE root node."""
         if not ast.has_children():
             return (True, str_i)
@@ -1382,7 +1382,7 @@ struct NFAEngine(Copyable, Engine):
         char_consumed: Int,
         match_first_mode: Bool,
         required_start_pos: Int,
-    ) capturing -> Tuple[Bool, Int]:
+    ) -> Tuple[Bool, Int]:
         """Apply quantifier logic to a matched element."""
         var min_matches = ast.min
         var max_matches = ast.max
