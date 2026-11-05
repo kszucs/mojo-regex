@@ -114,7 +114,7 @@ def check_for_quantifiers[
         i -= 1  # Compensate for the i += 1 at the end of the loop
 
 
-def get_range_str(start: String, end: String) -> String:
+def get_range_str(start: String, end: String) raises -> String:
     """Generate a string containing all characters in the range [start, end]."""
     var start_ord = ord(start)
     var end_ord = ord(end)

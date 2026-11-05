@@ -1090,7 +1090,7 @@ def simd_count_char(text: String, target_char: StringSlice) -> Int:
     if target_char.byte_length() != 1:
         return 0
 
-    var target_code = ord(target_char)
+    var target_code = Int(target_char.unsafe_ptr()[unsafe_offset=0])
     var target_simd = SIMD[DType.uint8, SIMD_WIDTH](target_code)
     var count = 0
     var pos = 0

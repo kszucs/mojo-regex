@@ -409,7 +409,9 @@ struct ASTNode[regex_origin: ImmOrigin](
         elif self.type == END:
             return str_i == str_len
         elif value.byte_length() == 1:
-            return self.is_match_char(ord(value), str_i, str_len)
+            return self.is_match_char(
+                Int(value.unsafe_ptr()[unsafe_offset=0]), str_i, str_len
+            )
         elif self.type == ELEMENT:
             return self.get_value() and (self.get_value().value() == value)
         return False
@@ -514,7 +516,7 @@ struct ASTNode[regex_origin: ImmOrigin](
         self,
         ch: StringSlice,
         range_pattern: StringSlice[origin_of(self.regex_ptr[].pattern)],
-    ) -> Bool:
+    ) raises -> Bool:
         """Check if a character is in a range pattern. Delegates to the
         int-based version."""
         return self._is_char_in_range_by_code(ord(ch), range_pattern)
@@ -523,7 +525,7 @@ struct ASTNode[regex_origin: ImmOrigin](
         self,
         ch: StringSlice,
         range_syntax: StringSlice[origin_of(self.regex_ptr[].pattern)],
-    ) -> Bool:
+    ) raises -> Bool:
         """Check if a character matches range syntax. Delegates to the
         int-based version."""
         return self._char_code_matches_range(ord(ch), range_syntax)

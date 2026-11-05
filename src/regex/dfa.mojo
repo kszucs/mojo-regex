@@ -120,25 +120,25 @@ def _expand_character_range[
     # For simple single ranges, use slicing from pre-defined sets
     var inner_ptr = inner.unsafe_ptr()
     if inner.byte_length() == 3 and Int(inner_ptr[unsafe_offset=1]) == ord("-"):
-        var start_char = inner[byte=0]
-        var end_char = inner[byte=2]
+        var start_code = Int(inner_ptr[unsafe_offset=0])
+        var end_code = Int(inner_ptr[unsafe_offset=2])
 
         # Handle lowercase letter ranges
-        if ord(start_char) >= CHAR_A and ord(end_char) <= CHAR_Z:
-            var start_idx = ord(start_char) - CHAR_A
-            var end_idx = ord(end_char) - CHAR_A + 1
+        if start_code >= CHAR_A and end_code <= CHAR_Z:
+            var start_idx = start_code - CHAR_A
+            var end_idx = end_code - CHAR_A + 1
             return String(LOWERCASE_LETTERS[byte=start_idx:end_idx])
 
         # Handle uppercase letter ranges
-        elif ord(start_char) >= CHAR_A and ord(end_char) <= CHAR_Z_UPPER:
-            var start_idx = ord(start_char) - CHAR_A_UPPER
-            var end_idx = ord(end_char) - CHAR_A_UPPER + 1
+        elif start_code >= CHAR_A and end_code <= CHAR_Z_UPPER:
+            var start_idx = start_code - CHAR_A_UPPER
+            var end_idx = end_code - CHAR_A_UPPER + 1
             return String(UPPERCASE_LETTERS[byte=start_idx:end_idx])
 
         # Handle digit ranges
-        elif ord(start_char) >= CHAR_ZERO and ord(end_char) <= CHAR_NINE:
-            var start_idx = ord(start_char) - CHAR_ZERO
-            var end_idx = ord(end_char) - CHAR_ZERO + 1
+        elif start_code >= CHAR_ZERO and end_code <= CHAR_NINE:
+            var start_idx = start_code - CHAR_ZERO
+            var end_idx = end_code - CHAR_ZERO + 1
             return String(DIGITS[byte=start_idx:end_idx])
 
     # Fallback for complex cases - expand all ranges and characters
@@ -151,10 +151,8 @@ def _expand_character_range[
             inner_ptr[unsafe_offset=i + 1]
         ) == ord("-"):
             # Found a range like a-z
-            var start_char = inner[byte=i]
-            var end_char = inner[byte=i + 2]
-            var start_code = ord(start_char)
-            var end_code = ord(end_char)
+            var start_code = Int(inner_ptr[unsafe_offset=i])
+            var end_code = Int(inner_ptr[unsafe_offset=i + 2])
 
             # Add all characters in the range
             for char_code in range(start_code, end_code + 1):
