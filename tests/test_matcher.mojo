@@ -78,9 +78,9 @@ def test_compiled_regex_stats() raises:
     var stats = regex.get_stats()
 
     # Should contain pattern information
-    assert_true(stats.find("hello") != -1)
-    assert_true(stats.find("Engine:") != -1)
-    assert_true(stats.find("Complexity:") != -1)
+    assert_true("hello" in stats)
+    assert_true("Engine:" in stats)
+    assert_true("Complexity:" in stats)
 
 
 def test_regex_caching() raises:
@@ -781,7 +781,7 @@ def test_dfa_performance_vs_nfa() raises:
     var stats = regex.get_stats()
 
     # Should mention DFA or show optimized pattern
-    assert_true(stats.find("DFA") != -1 or stats.find("SIMPLE") != -1)
+    assert_true("DFA" in stats or "SIMPLE" in stats)
 
 
 def test_dfa_multi_character_class_basic() raises:
@@ -887,7 +887,7 @@ def test_dfa_multi_character_class_engine_selection() raises:
     var stats = regex.get_stats()
 
     # Should mention DFA or show optimized pattern
-    assert_true(stats.find("DFA") != -1 or stats.find("SIMPLE") != -1)
+    assert_true("DFA" in stats or "SIMPLE" in stats)
 
 
 def test_dfa_negated_character_class_basic() raises:
@@ -1054,7 +1054,7 @@ def test_dfa_negated_character_class_engine_selection() raises:
     var stats = regex.get_stats()
 
     # Should mention DFA or show optimized pattern
-    assert_true(stats.find("DFA") != -1 or stats.find("SIMPLE") != -1)
+    assert_true("DFA" in stats or "SIMPLE" in stats)
 
 
 def test_us_toll_free_numbers() raises:
@@ -1085,7 +1085,7 @@ def test_us_toll_free_numbers() raises:
 
     # Test that pattern is classified as SIMPLE and uses DFA
     var stats = regex_simple.get_stats()
-    assert_true(stats.find("SIMPLE") != -1 or stats.find("DFA") != -1)
+    assert_true("SIMPLE" in stats or "DFA" in stats)
 
 
 def test_us_toll_free_numbers_complex() raises:
@@ -1165,7 +1165,7 @@ def test_us_toll_free_numbers_engine_optimization() raises:
     var simple_regex = CompiledRegex("[89]00[0-9]+")
     var simple_stats = simple_regex.get_stats()
     assert_true(
-        simple_stats.find("SIMPLE") != -1 or simple_stats.find("DFA") != -1
+        "SIMPLE" in simple_stats or "DFA" in simple_stats
     )
 
     # Complex pattern classification
@@ -1173,11 +1173,11 @@ def test_us_toll_free_numbers_engine_optimization() raises:
     var complex_stats = complex_regex.get_stats()
     # Complex pattern might use Hybrid engine due to alternation
     assert_true(
-        complex_stats.find("Hybrid") != -1
-        or complex_stats.find("MEDIUM") != -1
-        or complex_stats.find("DFA") != -1
-        or complex_stats.find("NFA") != -1
-        or complex_stats.find("SIMPLE") != -1
+        "Hybrid" in complex_stats
+        or "MEDIUM" in complex_stats
+        or "DFA" in complex_stats
+        or "NFA" in complex_stats
+        or "SIMPLE" in complex_stats
     )
 
 
@@ -1208,12 +1208,12 @@ def test_toll_free_vs_regular_phone_patterns() raises:
     var phone_stats = regular_phone.get_stats()
     var digits_stats = digits_only.get_stats()
 
-    assert_true(toll_stats.find("SIMPLE") != -1 or toll_stats.find("DFA") != -1)
+    assert_true("SIMPLE" in toll_stats or "DFA" in toll_stats)
     assert_true(
-        phone_stats.find("SIMPLE") != -1 or phone_stats.find("DFA") != -1
+        "SIMPLE" in phone_stats or "DFA" in phone_stats
     )
     assert_true(
-        digits_stats.find("SIMPLE") != -1 or digits_stats.find("DFA") != -1
+        "SIMPLE" in digits_stats or "DFA" in digits_stats
     )
 
 

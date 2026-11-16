@@ -414,9 +414,10 @@ struct MemchrPrefilter(Copyable, Movable, PrefilterMatcher):
         var start = 0
 
         while start < text.byte_length():
-            var pos = text.find(self.literal, start)
-            if pos == -1:
+            var found = text.find(self.literal, start)
+            if not found:
                 break
+            var pos = found.value()
             candidates.append(pos)
             start = pos + 1
 
@@ -429,9 +430,10 @@ struct MemchrPrefilter(Copyable, Movable, PrefilterMatcher):
         if start >= text.byte_length():
             return None
 
-        var pos = text.find(self.literal, start)
-        if pos == -1:
+        var found = text.find(self.literal, start)
+        if not found:
             return None
+        var pos = found.value()
         return pos
 
 
@@ -457,9 +459,10 @@ struct ExactLiteralMatcher(PrefilterMatcher):
             var start = 0
 
             while start <= text.byte_length() - literal.byte_length():
-                var pos = text.find(literal, start)
-                if pos == -1:
+                var found = text.find(literal, start)
+                if not found:
                     break
+                var pos = found.value()
                 # Verify this is a complete match (for anchored patterns)
                 candidates.append(pos)
                 start = pos + 1
@@ -476,8 +479,9 @@ struct ExactLiteralMatcher(PrefilterMatcher):
             if start + literal.byte_length() > text.byte_length():
                 continue
 
-            var pos = text.find(literal, start)
-            if pos != -1:
+            var found = text.find(literal, start)
+            if found:
+                var pos = found.value()
                 if not best_pos or pos < best_pos.value():
                     best_pos = pos
 

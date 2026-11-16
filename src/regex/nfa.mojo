@@ -212,7 +212,7 @@ struct NFAEngine(Copyable, Engine):
         if (
             self.starts_with_dotstar
             and self.has_literal_optimization
-            and text.find("\n") == -1
+            and "\n" not in text
         ):
             var last_pos = self._find_last_literal(text, current_pos)
             if last_pos >= 0:
@@ -232,7 +232,7 @@ struct NFAEngine(Copyable, Engine):
             self.ends_with_dotstar
             and self.has_literal_optimization
             and self.is_prefix_literal
-            and text.find("\n") == -1
+            and "\n" not in text
         ):
             var literal_bytes = self.literal_prefix.as_bytes()
             var search = current_pos
@@ -415,7 +415,7 @@ struct NFAEngine(Copyable, Engine):
         if (
             self.starts_with_dotstar
             and self.has_literal_optimization
-            and text.find("\n") == -1
+            and "\n" not in text
         ):
             var last_pos = self._find_last_literal(text, start)
             if last_pos >= 0:
@@ -429,7 +429,7 @@ struct NFAEngine(Copyable, Engine):
             self.ends_with_dotstar
             and self.has_literal_optimization
             and self.is_prefix_literal
-            and text.find("\n") == -1
+            and "\n" not in text
         ):
             var literal_bytes = self.literal_prefix.as_bytes()
             var pos = twoway_search(literal_bytes, text, start)
@@ -580,8 +580,8 @@ struct NFAEngine(Copyable, Engine):
         """Find the last occurrence of the literal prefix in text from start."""
         # Use rfind for O(n) reverse search instead of repeated forward search
         var pos = text.rfind(self.literal_prefix)
-        if pos >= start:
-            return pos
+        if pos and pos.value() >= start:
+            return pos.value()
         return -1
 
     def _create_range_matcher(

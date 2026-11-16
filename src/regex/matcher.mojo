@@ -772,8 +772,9 @@ struct HybridMatcher(Copyable, Movable, RegexMatcher):
                 # Simple bounds check to avoid issues
                 if start >= text.byte_length():
                     return None
-                var pos = text.find(literal, start)
-                if pos != -1:
+                var found = text.find(literal, start)
+                if found:
+                    var pos = found.value()
                     # Ensure we don't exceed text bounds
                     var end_pos = pos + literal.byte_length()
                     if end_pos <= text.byte_length():
@@ -832,9 +833,10 @@ struct HybridMatcher(Copyable, Movable, RegexMatcher):
 
                 # Safe loop with explicit bounds checking
                 while start <= max_start:
-                    var pos = text.find(literal, start)
-                    if pos == -1:
+                    var found = text.find(literal, start)
+                    if not found:
                         break
+                    var pos = found.value()
                     # Double-check bounds before creating Match
                     var end_pos = pos + literal_len
                     if end_pos <= text_len:

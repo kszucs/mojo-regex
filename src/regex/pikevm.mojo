@@ -829,11 +829,12 @@ struct LazyDFA(Copyable, Movable):
         if state_id == LAZY_DFA_DEAD:
             return None
 
-        # Get direct pointer to states data for unchecked access in hot loop
-        var states_ptr = self.states.unsafe_ptr()
 
         var pos = start
         while pos < text_len:
+            # A direct pointer to the states for unchecked access in the hot
+            # loop, fetched per step: `_compute_transition` may grow the list.
+            var states_ptr = self.states.unsafe_ptr()
             # Check if current state is a match
             if states_ptr[unsafe_offset=state_id].is_match:
                 match_end = pos
@@ -848,9 +849,7 @@ struct LazyDFA(Copyable, Movable):
                 next_id = self._compute_transition(
                     state_id, ch, text_ptr, pos, text_len
                 )
-                # Re-fetch pointer in case _compute_transition grew the list
-                states_ptr = self.states.unsafe_ptr()
-                states_ptr[unsafe_offset=state_id].transitions[ch] = next_id
+                self.states[state_id].transitions[ch] = next_id
 
             if next_id == LAZY_DFA_DEAD:
                 break
@@ -859,7 +858,7 @@ struct LazyDFA(Copyable, Movable):
             pos += 1
 
         # Check final state at text_len (handles $ anchor)
-        if states_ptr[unsafe_offset=state_id].is_match:
+        if self.states[state_id].is_match:
             match_end = pos
 
         if match_end >= 0:
